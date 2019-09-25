@@ -12,7 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# GKE variables.
+############################################################
+# GKE section
+############################################################
 PROJECT ?= oceanic-guard-191815
 ZONE    ?= us-west1-a
 CLUSTER ?= prow
