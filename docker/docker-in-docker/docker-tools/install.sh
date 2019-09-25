@@ -25,28 +25,26 @@ apt-get -qqy --no-install-recommends install \
   ca-certificates \
   curl \
   lsb-release \
-  python \
-  python-requests \
-  ruby \
-  rubygems \
-  ruby-dev \
   software-properties-common \
   unzip \
   wget \
   zip \
-  jq \
-  iptables
+  jq
 
-gem install --no-ri --no-rdoc fpm
+# install docker
+DOCKER_VERSION=18.06.1
+VERSION_SUFFIX="~ce~3-0~ubuntu"
 
-./install-docker.sh
-./install-gcloud.sh
-./install-kubectl.sh
-./install-golang.sh
-./install-helm.sh
-./install-protoc.sh
-./install-yamllint.sh
-./install-libcxx.sh
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+ $(lsb_release -cs) stable"
+apt-get update
+apt-get -qqy install docker-ce="${DOCKER_VERSION}${VERSION_SUFFIX}"
+
+# install kubectl
+curl -LO https://storage.googleapis.com/kubernetes-release/release/"$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)"/bin/linux/amd64/kubectl
+chmod +x ./kubectl
+mv ./kubectl /usr/local/bin/kubectl
 
 apt-get clean
 rm -rf /var/lib/apt/lists/*
