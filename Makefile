@@ -12,6 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# GKE variables.
+PROJECT ?= oceanic-guard-191815
+ZONE    ?= us-west1-a
+CLUSTER ?= prow
+
+.PHONY: activate-serviceaccount
+activate-serviceaccount:
+ifdef GOOGLE_APPLICATION_CREDENTIALS
+	gcloud auth activate-service-account --key-file="$(GOOGLE_APPLICATION_CREDENTIALS)"
+endif
+
+.PHONY: get-cluster-credentials
+get-cluster-credentials: save-kubeconfig activate-serviceaccount
+	gcloud container clusters get-credentials "$(CLUSTER)" --project="$(PROJECT)" --zone="$(ZONE)"
+
 #build:
 #	@go build ./...
 
@@ -25,7 +40,7 @@ lint: lint-all
 
 fmt: format-go format-python
 
-images:
+images: get-cluster-credentials
 	@cd docker/build-tools && ./build-and-push.sh
 
 include common/Makefile.common.mk
