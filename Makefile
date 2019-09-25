@@ -24,7 +24,7 @@ ifdef GOOGLE_APPLICATION_CREDENTIALS
 endif
 
 .PHONY: get-cluster-credentials
-get-cluster-credentials: save-kubeconfig activate-serviceaccount
+get-cluster-credentials: activate-serviceaccount
 	gcloud container clusters get-credentials "$(CLUSTER)" --project="$(PROJECT)" --zone="$(ZONE)"
 
 #build:

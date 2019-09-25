@@ -41,6 +41,17 @@ add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
 apt-get update
 apt-get -qqy install docker-ce="${DOCKER_VERSION}${VERSION_SUFFIX}"
 
+# install gcloud
+export CLOUDSDK_PYTHON_SITEPACKAGES=1
+export CLOUDSDK_CORE_DISABLE_PROMPTS=1
+export CLOUDSDK_INSTALL_DIR=/usr/lib/
+curl https://sdk.cloud.google.com | bash
+
+export PATH="${PATH}:/usr/lib/google-cloud-sdk/bin"
+
+sed -i -e 's/true/false/' /usr/lib/google-cloud-sdk/lib/googlecloudsdk/core/config.json
+gcloud -q components update
+
 # install kubectl
 curl -LO https://storage.googleapis.com/kubernetes-release/release/"$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)"/bin/linux/amd64/kubectl
 chmod +x ./kubectl
