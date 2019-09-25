@@ -27,11 +27,11 @@ endif
 get-cluster-credentials: activate-serviceaccount
 	gcloud container clusters get-credentials "$(CLUSTER)" --project="$(PROJECT)" --zone="$(ZONE)"
 
-#build:
-#	@go build ./...
+build:
+	@go build ./...
 
-#test:
-#	@go test -race ./...
+test:
+	@go test -race ./...
 
 #check-stability:
 #	./metrics/check_metrics.py
