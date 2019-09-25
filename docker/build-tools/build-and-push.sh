@@ -14,18 +14,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-KUBECTL=${KUBECTL:-kubectl}
-DOCKER_REGISTRY=${DOCKER_REGISTRY:-quay.io}
-DOCKER_USERNAME=${DOCKER_USERNAME:-multicloudlab}
+KUBECTL=$(which kubectl)
+DOCKER_REGISTRY="quay.io"
+DOCKER_USERNAME="multicloudlab"
 DOCKER_PASSWORD=$(${KUBECTL} -n default get secret quay-cred -o jsonpath='{.data.password}' | base64 --decode)
 
 # support other container tools, e.g. podman
 CONTAINER_CLI=${CONTAINER_CLI:-docker}
-HUB=${DOCKER_REGISTRY}/${DOCKER_USERNAME}
+HUB="${DOCKER_REGISTRY}/${DOCKER_USERNAME}"
 VERSION=$(date +%Y-%m-%dT%H-%M-%S)
 
 # login the docker registry
-${CONTAINER_CLI} login ${DOCKER_REGISTRY} -u ${DOCKER_USERNAME} -p {DOCKER_PASSWORD}
+${CONTAINER_CLI} login "${DOCKER_REGISTRY}" -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
 
 ${CONTAINER_CLI} build -t "${HUB}/build-tools:${VERSION}" .
 ${CONTAINER_CLI} push "${HUB}/build-tools:${VERSION}"
