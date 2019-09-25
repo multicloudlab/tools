@@ -9,6 +9,8 @@ RUN cd /tmp/tools && ./install.sh && rm -rf /tmp/tools
 VOLUME /var/lib/docker
 EXPOSE 2375
 
+ENV PATH /usr/lib/google-cloud-sdk/bin:${PATH}
+
 # Add entrypoint to start docker
 ADD docker-tools/prow-runner.sh /usr/local/bin/entrypoint
 RUN chmod +rx /usr/local/bin/entrypoint
