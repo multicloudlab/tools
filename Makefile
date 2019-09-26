@@ -12,35 +12,72 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# GKE variables.
-PROJECT ?= oceanic-guard-191815
-ZONE    ?= us-west1-a
-CLUSTER ?= prow
+GIT_HOST = github.com/multicloudlab
+PWD := $(shell pwd)
+BASE_DIR := $(shell basename $(PWD))
 
-.PHONY: activate-serviceaccount
-activate-serviceaccount:
-ifdef GOOGLE_APPLICATION_CREDENTIALS
-	gcloud auth activate-service-account --key-file="$(GOOGLE_APPLICATION_CREDENTIALS)"
+# Keep an existing GOPATH, make a private one if it is undefined
+GOPATH_DEFAULT := $(PWD)/.go
+export GOPATH ?= $(GOPATH_DEFAULT)
+GOBIN_DEFAULT := $(GOPATH)/bin
+export GOBIN ?= $(GOBIN_DEFAULT)
+TESTARGS_DEFAULT := "-v"
+export TESTARGS ?= $(TESTARGS_DEFAULT)
+DEST := $(GOPATH)/src/$(GIT_HOST)/$(BASE_DIR)
+VERSION ?= $(shell git describe --exact-match 2> /dev/null || \
+                 git describe --match=$(git rev-parse --short=8 HEAD) --always --dirty --abbrev=8)
+
+ifneq ("$(realpath $(DEST))", "$(realpath $(PWD))")
+	$(error Please run 'make' from $(DEST). Current directory is $(PWD))
 endif
 
-.PHONY: get-cluster-credentials
-get-cluster-credentials: activate-serviceaccount
-	gcloud container clusters get-credentials "$(CLUSTER)" --project="$(PROJECT)" --zone="$(ZONE)"
+include common/Makefile.common.mk
 
-build:
-	@go build ./...
+all: test build images
 
-test:
-	@go test -race ./...
+############################################################
+# work section
+############################################################
+$(GOBIN):
+	@echo "create gobin"
+	@mkdir -p $(GOBIN)
 
-#check-stability:
-#	./metrics/check_metrics.py
+work: $(GOBIN)
+
+############################################################
+# check section
+############################################################
+check: fmt lint
+
+fmt: format-go format-protos format-python
 
 lint: lint-all
 
-fmt: format-go format-python
+############################################################
+# test section
+############################################################
 
-images: get-cluster-credentials
+test:
+	@go test ${TESTARGS} ./...
+
+############################################################
+# build section
+############################################################
+
+build:
+	@common/scripts/gobuild.sh tools ./...
+
+############################################################
+# images section
+############################################################
+
+images: build-push-images
+
+build-push-images: config-docker
 	@cd docker/build-tools && ./build-and-push.sh
 
-include common/Makefile.common.mk
+############################################################
+# clean section
+############################################################
+clean:
+	@echo "cleaning..."
