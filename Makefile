@@ -65,7 +65,7 @@ test:
 ############################################################
 
 build:
-	@common/scripts/gobuild.sh tools ./...
+	@common/scripts/gobuild.sh tools ./cmd
 
 ############################################################
 # images section
