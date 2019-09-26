@@ -21,14 +21,6 @@ DOCKER_PASSWORD=$(${KUBECTL} -n default get secret quay-cred -o jsonpath='{.data
 
 # support other container tools, e.g. podman
 CONTAINER_CLI=${CONTAINER_CLI:-docker}
-HUB="${DOCKER_REGISTRY}/${DOCKER_USERNAME}"
-VERSION=$(date +%Y-%m-%dT%H-%M-%S)
 
 # login the docker registry
 ${CONTAINER_CLI} login "${DOCKER_REGISTRY}" -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
-
-${CONTAINER_CLI} build -t "${HUB}/build-tools:${VERSION}" .
-${CONTAINER_CLI} push "${HUB}/build-tools:${VERSION}"
-
-# logout the docker registry
-${CONTAINER_CLI} logout ${DOCKER_REGISTRY}
