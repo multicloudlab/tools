@@ -103,7 +103,9 @@ RUN apt-get update && apt-get -qqy install --no-install-recommends docker-ce="${
 RUN mv /usr/bin/docker ${OUTDIR}/usr/bin
 
 # gcloud SDK
-RUN curl https://sdk.cloud.google.com | bash
+RUN curl https://sdk.cloud.google.com > /tmp/install_gcloud_sdk
+RUN chmod +x /tmp/install_gcloud_sdk
+RUN bash /tmp/install_gcloud_sdk
 ENV PATH /usr/lib/google-cloud-sdk/bin:${PATH}
 
 # Cleanup stuff we don't need in the final image
