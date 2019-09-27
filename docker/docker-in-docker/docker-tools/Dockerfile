@@ -5,13 +5,11 @@ COPY docker-tools/install.sh /tmp/tools/
 RUN chmod -R +x /tmp/tools/install.sh
 RUN /tmp/tools/install.sh && rm -rf /tmp/tools
 
-COPY --from=koalaman/shellcheck-alpine:v0.6.0 /bin/shellcheck /bin/shellcheck
-
 # Docker in Docker settings
 VOLUME /var/lib/docker
 EXPOSE 2375
 
-ENV PATH /usr/local/go/bin:/home/go/bin:/usr/lib/google-cloud-sdk/bin:/bin:${PATH}
+ENV PATH /usr/local/go/bin:/home/go/bin:/usr/lib/google-cloud-sdk/bin:${PATH}
 
 # COPY entrypoint to start docker
 COPY docker-tools/prow-runner.sh /usr/local/bin/entrypoint
