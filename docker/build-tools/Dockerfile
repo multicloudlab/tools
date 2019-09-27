@@ -22,6 +22,9 @@ ENV SHELLCHECK_VERSION=v0.7.0
 ENV UPX_VERSION=3.95
 ENV DOCKER_VERSION=18.06.1~ce~3-0
 ENV KIND_VERSION=v0.5.1
+ENV CLOUDSDK_PYTHON_SITEPACKAGES=1
+ENV CLOUDSDK_CORE_DISABLE_PROMPTS=1
+ENV CLOUDSDK_INSTALL_DIR=/usr/lib/
 
 WORKDIR /tmp
 ENV GOPATH=/tmp/go
@@ -98,6 +101,10 @@ RUN apt-key add /tmp/dkey
 RUN add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"
 RUN apt-get update && apt-get -qqy install --no-install-recommends docker-ce="${DOCKER_VERSION}~ubuntu"
 RUN mv /usr/bin/docker ${OUTDIR}/usr/bin
+
+# gcloud SDK
+RUN curl https://sdk.cloud.google.com | bash
+ENV PATH /usr/lib/google-cloud-sdk/bin:${PATH}
 
 # Cleanup stuff we don't need in the final image
 RUN rm -fr /usr/local/go/doc
