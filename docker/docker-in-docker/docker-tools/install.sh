@@ -31,6 +31,19 @@ apt-get -qqy --no-install-recommends install \
   zip \
   jq
 
+# install golang
+GO_VERSION='1.13'
+GO_BASE_URL="https://storage.googleapis.com/golang"
+GO_ARCHIVE="go${GO_VERSION}.linux-amd64.tar.gz"
+GO_URL="${GO_BASE_URL}/${GO_ARCHIVE}"
+
+export GOPATH=/home/go
+mkdir -p ${GOPATH}/bin
+curl -L "${GO_URL}" | tar -C /usr/local -xzf -
+export PATH=${GOPATH}/bin:/usr/local/go/bin:${PATH}
+
+rm -rf "${GO_ARCHIVE}"
+
 # install docker
 DOCKER_VERSION=18.06.1
 VERSION_SUFFIX="~ce~3-0~ubuntu"
