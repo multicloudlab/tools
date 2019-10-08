@@ -136,6 +136,7 @@ ENV MARKDOWN_SPELLCHECK_VERSION=v1.3.1
 ENV NODEJS_VERSION=12.8.0
 ENV SASS_LINT_VERSION=v1.13.1
 ENV SASS_VERSION=v1.22.10
+ENV DOCTOC_VERSION=v1.4.0
 ENV SVGO_VERSION=v1.3.0
 ENV SVGSTORE_CLI_VERSION=v1.3.1
 ENV TSLINT_VERSION=v5.18.0
@@ -150,6 +151,7 @@ RUN tar -xzf /tmp/node-v${NODEJS_VERSION}-headers.tar.gz --strip-components=1 -C
 RUN npm init -y
 RUN npm install --production --global \
     sass@"${SASS_VERSION}" \
+    doctoc@"${DOCTOC_VERSION}"\
     sass-lint@"${SASS_LINT_VERSION}" \
     typescript@"${TYPESCRIPT_VERSION}" \
     tslint@"${TSLINT_VERSION}" \
