@@ -99,6 +99,7 @@ RUN chmod 555 ${OUTDIR}/usr/bin/kubectl
 # kubebuilder
 ADD https://github.com/kubernetes-sigs/kubebuilder/releases/download/v${KUBEBUILDER_VERSION}/kubebuilder_${KUBEBUILDER_VERSION}_linux_amd64.tar.gz /tmp
 RUN tar -xf kubebuilder_${KUBEBUILDER_VERSION}_linux_amd64.tar.gz -C /tmp
+RUN mkdir -p ${OUTDIR}/usr/local/kubebuilder
 RUN mv /tmp/kubebuilder_${KUBEBUILDER_VERSION}_linux_amd64 ${OUTDIR}/usr/local/kubebuilder
 
 # Docker
