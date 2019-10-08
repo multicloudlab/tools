@@ -98,9 +98,8 @@ RUN chmod 555 ${OUTDIR}/usr/bin/kubectl
 
 # kubebuilder
 ADD https://github.com/kubernetes-sigs/kubebuilder/releases/download/v${KUBEBUILDER_VERSION}/kubebuilder_${KUBEBUILDER_VERSION}_linux_amd64.tar.gz /tmp
-RUN tar -xf kubebuilder_${KUBEBUILDER_VERSION}_linux_amd64.tar.gz -C /tmp
-RUN mkdir -p ${OUTDIR}/usr/local/kubebuilder
-RUN mv /tmp/kubebuilder_${KUBEBUILDER_VERSION}_linux_amd64 ${OUTDIR}/usr/local/kubebuilder
+RUN mkdir -p /usr/local/kubebuilder
+RUN tar -xf kubebuilder_${KUBEBUILDER_VERSION}_linux_amd64.tar.gz --strip-components=1 -C /usr/local/kubebuilder
 
 # Docker
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg >/tmp/dkey
@@ -296,6 +295,7 @@ ENV RUBYOPT="-KU -E utf-8:utf-8"
 # Create the file system
 COPY --from=base_os_context / /
 COPY --from=binary_tools_context /out/ /
+COPY --from=binary_tools_context /usr/local/kubebuilder /usr/local/kubebuilder
 COPY --from=binary_tools_context /usr/local/go /usr/local/go
 COPY --from=binary_tools_context /usr/lib/google-cloud-sdk /usr/lib/google-cloud-sdk
 COPY --from=ruby_tools_context /usr/local/bin /usr/local/bin
