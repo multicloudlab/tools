@@ -13,6 +13,7 @@ ENV HADOLINT_VERSION=v1.17.2
 ENV HELM_VERSION=v2.10.0
 ENV K8S_CODE_GENERATOR_VERSION=1.13.10
 ENV KUBECTL_VERSION=1.15.0
+ENV KUBEBUILDER_VERSION=1.0.8
 ENV PROTOC_GEN_GRPC_GATEWAY_VERSION=v1.8.1
 ENV PROTOC_GEN_SWAGGER_VERSION=v1.8.1
 ENV PROTOC_GEN_VALIDATE_VERSION=d6164de4910977d3c3c8dbd9299b5064ea9e7c2b
@@ -94,6 +95,11 @@ RUN mv /tmp/linux-amd64/helm ${OUTDIR}/usr/bin
 # Kubectl
 ADD https://storage.googleapis.com/kubernetes-release/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl ${OUTDIR}/usr/bin/kubectl
 RUN chmod 555 ${OUTDIR}/usr/bin/kubectl
+
+# kubebuilder
+ADD https://github.com/kubernetes-sigs/kubebuilder/releases/download/v${KUBEBUILDER_VERSION}/kubebuilder_${KUBEBUILDER_VERSION}_linux_amd64.tar.gz /tmp
+RUN tar -xf kubebuilder_${KUBEBUILDER_VERSION}_linux_amd64.tar.gz -C /tmp
+RUN mv /tmp/kubebuilder_${KUBEBUILDER_VERSION}_linux_amd64 ${OUTDIR}/usr/local/kubebuilder
 
 # Docker
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg >/tmp/dkey
@@ -281,7 +287,7 @@ ENV GOSUMDB=https://sum.golang.org
 ENV GOROOT=/usr/local/go
 ENV GOPATH=/home/go
 ENV GOCACHE=/home/gocache
-ENV PATH=/usr/lib/google-cloud-sdk/bin:/usr/local/go/bin:/home/go/bin:$PATH
+ENV PATH=/usr/lib/google-cloud-sdk/bin:/usr/local/kubebuilder/bin:/usr/local/go/bin:/home/go/bin:$PATH
 
 # Ruby suppport
 ENV RUBYOPT="-KU -E utf-8:utf-8"
