@@ -256,6 +256,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     make \
     pkg-config \
     python3 \
+    ssh \
     wget
 
 # Clean up stuff we don't need in the final image
