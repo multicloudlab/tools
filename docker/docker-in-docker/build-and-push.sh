@@ -25,6 +25,3 @@ VERSION=$(date +v%Y%m%d)-$(git describe --tags --always --dirty)
 
 ${CONTAINER_CLI} build -t "${HUB}/${IMAGE}:${VERSION}" .
 ${CONTAINER_CLI} push "${HUB}/${IMAGE}:${VERSION}"
-
-# logout the docker registry
-${CONTAINER_CLI} logout ${DOCKER_REGISTRY}
