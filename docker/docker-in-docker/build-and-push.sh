@@ -20,7 +20,7 @@ DOCKER_USERNAME="multicloudlab"
 # support other container tools, e.g. podman
 CONTAINER_CLI=${CONTAINER_CLI:-docker}
 HUB="${DOCKER_REGISTRY}/${DOCKER_USERNAME}"
-IMAGE="build-tools"
+IMAGE="multicloudlab-builder"
 VERSION=$(date +v%Y%m%d)-$(git describe --tags --always --dirty)
 
 ${CONTAINER_CLI} build -t "${HUB}/${IMAGE}:${VERSION}" .

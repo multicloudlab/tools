@@ -75,6 +75,7 @@ images: build-push-images
 
 build-push-images: config-docker
 	@cd docker/build-tools && ./build-and-push.sh
+	@cd docker/docker-in-docker && ./build-and-push.sh
 
 ############################################################
 # clean section
