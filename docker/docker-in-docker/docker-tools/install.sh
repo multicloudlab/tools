@@ -26,6 +26,7 @@ apt-get -qqy --no-install-recommends install \
   curl \
   lsb-release \
   software-properties-common \
+  ssh \
   unzip \
   wget \
   zip \
